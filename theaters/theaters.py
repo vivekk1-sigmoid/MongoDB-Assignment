@@ -11,5 +11,15 @@ db.getCollection('theaters').aggregate([
 
 
 # 2.	top 10 theatres nearby given coordinates
+# some problem with the output
+db.getCollection('theaters').find({
+        "location.geo": 
+            {
+                    "$near": 
+                    {
+                        "$geometry": {"type": "Point", "coordinates": [-93.24565, 44.85466]},  
+                    }
+                }
+    }).limit(10)
 
 

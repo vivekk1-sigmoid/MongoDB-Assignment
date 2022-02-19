@@ -112,6 +112,14 @@ db.getCollection('movies').aggregate([
     
 # 4. 	Find top `N` movies for each genre with the highest IMDB rating
 
+db.getCollection('movies').aggregate([
+        {"$unwind": "$genres"},
+        {"$group": {"_id": {"genres": "$genres"}, "filmPlusRating": {"$push": {"title": "$title", "rating": "$imdb.rating"}}}},
+        {"$unwind": "$filmPlusRating"},
+        {"$sort": {"filmPlusRating.rating": -1}},
+        {"$group": {"_id": {"genres": "$_id.genres"}, "filmPlusRating": {"$push": "$filmPlusRating"}}},
+        {"$project": {"_id": 1, "filmPlusRating": {"$slice": ["$filmPlusRating", 10]}}}
+    ])
 
 
 

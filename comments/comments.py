@@ -17,4 +17,17 @@ db.getCollection('comments').aggregate([
 
 # 3. Given a year find the total number of comments created each month in that year
 
+db.getCollection('comments').aggregate([
+        {"$project": {"_id": 0, "date": {"$toDate": {"$convert": {"input": "$date", "to": "long"}}}}}, 
+        {"$group": {
+            "_id": {
+                "year": {"$year": "$date"}, 
+                "month": {"$month": "$date"}
+            }, 
+            "totalPerson": {"$sum": 1}}
+        },
+        {"$match": {"_id.year": {"$eq": 2011}}},
+        {"$sort": {"_id.month": 1}}
+    ])
+
 
